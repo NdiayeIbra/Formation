@@ -10,7 +10,18 @@
 
 		public function get($id = null, $ret = false) {
 
-			$result = $this->db->select("teams")->fetchAll();
+			if (isset($id)) {
+				$result = $this ->db
+								->select("tabs")
+								->where(array(
+									"id"	=>	$id
+								))
+								->fetchAll();
+			}
+			else {
+				$result = $this->db->select("tabs")->fetchAll();
+			}
+			
 
 			echo json_encode($result);
 			
@@ -30,7 +41,7 @@
 			    return false;
 			}
 
-			$_data = array("name", "pts", "g", "j", "n");
+			$_data = array("content", "name");
 
 			$set = array();
 			for ($i=0 ; $i < count($_data) ; $i++) {
@@ -43,12 +54,12 @@
 			}
 
 			if (!isset($id)) {
-				$result = 	$this->db 	->insert("teams")
+				$result = 	$this->db 	->insert("tabs")
 										->values($set)
 										->exec();
 			}
 			else {
-				$result = 	$this->db 	->update("teams")
+				$result = 	$this->db 	->update("tabs")
 										->set($set)
 										->where(array(
 											"id"	=>	$id
@@ -63,7 +74,7 @@
 
 		public function delete($id) {
 
-			$query = 	$this->db 	->delete("teams")
+			$query = 	$this->db 	->delete("tabs")
 									->where(array(
 										"id"			=>	$id
 									))
